@@ -132,16 +132,20 @@ export function deleteProduct(params: ProductByIdParams) {
 }
 
 export const dummyJsonApi = {
-  login,
-  getAuthUser,
-  refreshAuthSession,
-  getProducts,
-  getProduct,
-  searchProducts,
-  getProductsCategories,
-  getProductCategoryList,
-  getProductsByCategory,
-  addProduct,
-  updateProduct,
-  deleteProduct,
+  auth: {
+    login,
+    getAuthUser,
+    refreshAuthSession,
+  },
+  products: {
+    getProducts,
+    getProduct,
+    searchProducts,
+    getProductsCategories,
+    getProductCategoryList,
+    getProductsByCategory,
+    addProduct,
+    updateProduct,
+    deleteProduct,
+  },
 };
