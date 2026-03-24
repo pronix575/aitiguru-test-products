@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useFormik } from "formik";
+
 import { CheckboxField } from "@/components/CheckboxField";
 import { ClearIcon } from "@/components/icons/ClearIcon";
 import { EyeIcon } from "@/components/icons/EyeIcon";
@@ -22,16 +24,28 @@ import {
   TitleWrapper,
   Wrapper,
 } from "./LoginPage.styled";
+import {
+  loginPageValidationSchema,
+  type LoginPageFormValues,
+} from "./LoginPage.constants";
 
 export const LoginPage = () => {
-  const [login, setLogin] = useState("test");
-  const [password, setPassword] = useState("password12345");
-  const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const formik = useFormik<LoginPageFormValues>({
+    initialValues: {
+      login: "",
+      password: "",
+      remember: false,
+    },
+    validationSchema: loginPageValidationSchema,
+    onSubmit: (values) => {
+      void values;
+    },
+  });
 
   return (
     <Wrapper>
-      <Form onSubmit={(event) => event.preventDefault()}>
+      <Form onSubmit={formik.handleSubmit}>
         <LogoWrapper>
           <Logo />
         </LogoWrapper>
@@ -43,19 +57,27 @@ export const LoginPage = () => {
           <Fields>
             <InputField
               id="login"
+              name="login"
               label="Логин"
               type="text"
-              value={login}
-              onChange={(event) => setLogin(event.target.value)}
+              value={formik.values.login}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder="Введите логин"
               autoComplete="username"
+              hasError={Boolean(formik.touched.login && formik.errors.login)}
+              errorMessage={
+                formik.touched.login ? formik.errors.login : undefined
+              }
               leadingIcon={<UserIcon />}
               trailingAction={
-                login
+                formik.values.login
                   ? {
                       ariaLabel: "Очистить логин",
                       icon: <ClearIcon />,
-                      onClick: () => setLogin(""),
+                      onClick: () => {
+                        void formik.setFieldValue("login", "");
+                      },
                     }
                   : undefined
               }
@@ -63,12 +85,20 @@ export const LoginPage = () => {
 
             <InputField
               id="password"
+              name="password"
               label="Пароль"
               type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder="Введите пароль"
               autoComplete="current-password"
+              hasError={Boolean(
+                formik.touched.password && formik.errors.password,
+              )}
+              errorMessage={
+                formik.touched.password ? formik.errors.password : undefined
+              }
               leadingIcon={<LockIcon />}
               trailingAction={{
                 ariaLabel: showPassword ? "Скрыть пароль" : "Показать пароль",
@@ -80,9 +110,11 @@ export const LoginPage = () => {
 
           <RememberRow>
             <CheckboxField
-              checked={remember}
+              checked={formik.values.remember}
               label="Запомнить данные"
-              onChange={setRemember}
+              onChange={(checked) => {
+                void formik.setFieldValue("remember", checked);
+              }}
             />
           </RememberRow>
 

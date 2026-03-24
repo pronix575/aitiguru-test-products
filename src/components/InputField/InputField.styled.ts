@@ -13,13 +13,17 @@ export const Label = styled.label`
   color: #232323;
 `;
 
-export const InputShell = styled.div`
+type InputShellProps = {
+  $hasError?: boolean;
+};
+
+export const InputShell = styled.div<InputShellProps>`
   display: flex;
   align-items: center;
   gap: 10px;
   min-height: 43px;
   padding: 0 10px;
-  border: 1px solid #e8e8e8;
+  border: 1px solid ${({ $hasError }) => ($hasError ? "#e16565" : "#e8e8e8")};
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.92);
   transition:
@@ -28,10 +32,13 @@ export const InputShell = styled.div`
     transform 0.2s ease;
 
   &:focus-within {
-    border-color: rgba(51, 68, 232, 0.35);
+    border-color: ${({ $hasError }) =>
+      $hasError ? "rgba(225, 101, 101, 0.9)" : "rgba(51, 68, 232, 0.35)"};
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      0 0 0 3px rgba(51, 68, 232, 0.08),
+      0 0 0 3px
+        ${({ $hasError }) =>
+          $hasError ? "rgba(225, 101, 101, 0.12)" : "rgba(51, 68, 232, 0.08)"},
       0 6px 19px rgba(0, 0, 0, 0.03);
   }
 
@@ -97,4 +104,10 @@ export const ActionButton = styled.button`
     width: 22px;
     height: 22px;
   }
+`;
+
+export const ErrorMessage = styled.div`
+  font-size: 12px;
+  line-height: 1.3;
+  color: #e16565;
 `;
