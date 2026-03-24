@@ -1,13 +1,21 @@
 import { useUnit } from "effector-react";
-import { authService } from "../auth";
-import { PrimaryButton } from "@/components/PrimaryButton";
+import { productsService } from "./products.service";
+import { ProductsPage } from "./ProductsPage";
+
+const {
+  gates: { ProductsGate },
+  models,
+} = productsService;
 
 export const ProductsContainer = () => {
-  const { logout } = useUnit({ logout: authService.events.handleLogout });
+  const { productsList } = useUnit({
+    productsList: models.$productsPagedList,
+  });
 
   return (
-    <div>
-      <PrimaryButton onClick={logout}>Выйти</PrimaryButton>
-    </div>
+    <>
+      <ProductsGate />
+      <ProductsPage productsList={productsList} />
+    </>
   );
 };

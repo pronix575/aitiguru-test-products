@@ -3,14 +3,14 @@ import { useEffect, useState, type FC } from "react";
 
 import { useFormik } from "formik";
 
-import { CheckboxField } from "@/components/CheckboxField";
+import { CheckboxField } from "@/components/ui/CheckboxField";
 import { ClearIcon } from "@/components/icons/ClearIcon";
 import { EyeIcon } from "@/components/icons/EyeIcon";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Logo } from "@/components/icons/Logo";
 import { UserIcon } from "@/components/icons/UserIcon";
-import { InputField } from "@/components/InputField";
-import { PrimaryButton } from "@/components/PrimaryButton";
+import { InputField } from "@/components/ui/InputField";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import {
   Content,
   Divider,

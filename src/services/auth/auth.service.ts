@@ -83,7 +83,10 @@ const $sessionStorageRefreshToken = createStore<string | null>(null).on(
 );
 
 sample({
-  clock: [$sessionStorageAuthToken.updates, $sessionStorageRefreshToken.updates],
+  clock: [
+    $sessionStorageAuthToken.updates,
+    $sessionStorageRefreshToken.updates,
+  ],
   source: {
     authToken: $sessionStorageAuthToken,
     refreshToken: $sessionStorageRefreshToken,
@@ -236,5 +239,7 @@ export const authService = {
     setRefreshToken,
     setRememberMe,
   },
-  AuthGate,
+  gates: {
+    AuthGate,
+  },
 };

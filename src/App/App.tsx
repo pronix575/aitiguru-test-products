@@ -3,7 +3,9 @@ import { Router } from "../Router";
 import { authService } from "@/services/auth";
 import { BrowserRouter } from "react-router-dom";
 
-const { AuthGate } = authService;
+const {
+  gates: { AuthGate },
+} = authService;
 
 export function App() {
   const isCheckingAuth = useUnit(authService.models.$isCheckingAuth);
