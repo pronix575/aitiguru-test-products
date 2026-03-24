@@ -6,7 +6,6 @@ export const getRoutes = (isAuth: boolean): RouteObject[] => {
   const authRoutes: RouteObject[] = [
     {
       path: "/login",
-      
     },
   ];
 
