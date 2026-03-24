@@ -1,4 +1,4 @@
-import { createEvent, createStore, sample } from "effector";
+import { combine, createEvent, createStore, sample } from "effector";
 import { persist as persistLocal } from "effector-storage/local";
 import { persist as persistSession } from "effector-storage/session";
 import { createGate } from "effector-react";
@@ -82,15 +82,19 @@ const $sessionStorageRefreshToken = createStore<string | null>(null).on(
   (_, token) => token,
 );
 
+const $sessionStorageCredentials = combine({
+  authToken: $sessionStorageAuthToken,
+  refreshToken: $sessionStorageRefreshToken,
+});
+
+const $localStorageCredentials = combine({
+  authToken: $localStorageAuthToken,
+  refreshToken: $localStorageRefreshToken,
+});
+
 sample({
-  clock: [
-    $sessionStorageAuthToken.updates,
-    $sessionStorageRefreshToken.updates,
-  ],
-  source: {
-    authToken: $sessionStorageAuthToken,
-    refreshToken: $sessionStorageRefreshToken,
-  },
+  clock: $sessionStorageCredentials.updates,
+  source: $sessionStorageCredentials,
   filter: ({ authToken, refreshToken }) => Boolean(authToken && refreshToken),
   fn: ({ authToken, refreshToken }) => ({
     authToken: authToken as string,
@@ -101,11 +105,8 @@ sample({
 });
 
 sample({
-  clock: [$localStorageAuthToken.updates, $localStorageRefreshToken.updates],
-  source: {
-    authToken: $localStorageAuthToken,
-    refreshToken: $localStorageRefreshToken,
-  },
+  clock: $localStorageCredentials.updates,
+  source: $localStorageCredentials,
   filter: ({ authToken, refreshToken }) => Boolean(authToken && refreshToken),
   fn: ({ authToken, refreshToken }) => ({
     authToken: authToken as string,
@@ -153,13 +154,6 @@ sample({
   clock: syncStorage,
   fn: ({ sessionStorageRefreshToken }) => sessionStorageRefreshToken,
   target: setSessionStorageRefreshToken,
-});
-
-sample({
-  clock: AuthGate.open,
-  source: $authToken,
-  filter: Boolean,
-  target: checkAuthFx,
 });
 
 sample({
