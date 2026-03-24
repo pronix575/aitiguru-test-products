@@ -22,7 +22,7 @@ const $authToken = createStore<string | null>(null)
   .on(setAuthToken, (_, token) => token)
   .on(hydrateAuth, (_, { authToken }) => authToken);
 
-const $isAuth = createStore(false);
+const $isAuth = $authToken.map(Boolean);
 
 const $rememberMe = createStore(false)
   .on(setRememberMe, (_, remember) => remember)
@@ -82,8 +82,15 @@ sample({
 });
 
 sample({
-  clock: checkAuthFx.doneData,
-  fn: (response) => response,
+  clock: hydrateAuth,
+  fn: ({ authToken }) => authToken,
+  target: checkAuthFx,
+});
+
+sample({
+  clock: checkAuthFx.fail,
+  fn: () => null,
+  target: setAuthToken,
 });
 
 persistSession({

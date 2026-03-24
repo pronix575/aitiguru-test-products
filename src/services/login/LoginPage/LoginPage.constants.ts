@@ -1,12 +1,7 @@
 import * as yup from "yup";
+import type { LoginFormValues } from "../login.types";
 
-export type LoginPageFormValues = {
-  login: string;
-  password: string;
-  remember: boolean;
-};
-
-export const LOGIN_PAGE_INITIAL_VALUES: LoginPageFormValues = {
+export const LOGIN_PAGE_INITIAL_VALUES: LoginFormValues = {
   login: "",
   password: "",
   remember: false,

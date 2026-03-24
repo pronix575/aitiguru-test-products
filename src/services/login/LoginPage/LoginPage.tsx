@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FC } from "react";
 
 import { useFormik } from "formik";
 
@@ -27,17 +27,23 @@ import {
 import {
   LOGIN_PAGE_INITIAL_VALUES,
   loginPageValidationSchema,
-  type LoginPageFormValues,
 } from "./LoginPage.constants";
+import { type LoginFormValues } from "../login.types";
+import type { LoginPageProps } from "./LoginPage.types";
 
-export const LoginPage = () => {
+export const LoginPage: FC<LoginPageProps> = ({
+  rememberMe,
+  setRememberMe,
+  handleLogin,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
-  const formik = useFormik<LoginPageFormValues>({
+  
+  const formik = useFormik<LoginFormValues>({
     initialValues: LOGIN_PAGE_INITIAL_VALUES,
     validationSchema: loginPageValidationSchema,
     validateOnMount: true,
-    onSubmit: async (values) => {
-      void values;
+    onSubmit: (values) => {
+      handleLogin(values);
     },
   });
 
@@ -108,10 +114,10 @@ export const LoginPage = () => {
 
           <RememberRow>
             <CheckboxField
-              checked={formik.values.remember}
+              checked={rememberMe}
               label="Запомнить данные"
               onChange={(checked) => {
-                void formik.setFieldValue("remember", checked);
+                setRememberMe(checked);
               }}
             />
           </RememberRow>
