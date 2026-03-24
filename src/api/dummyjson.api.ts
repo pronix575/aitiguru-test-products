@@ -1,3 +1,8 @@
+import {
+  buildQueryString,
+  normalizeQueryArrayValue,
+  request,
+} from "./api.client";
 import type {
   AddProductRequest,
   DeleteProductResponse,
@@ -17,45 +22,7 @@ import type {
   UpdateProductRequest,
 } from "./dummyjson.types";
 
-const DUMMYJSON_BASE_URL = "https://dummyjson.com";
-
-type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-interface RequestOptions {
-  method?: HttpMethod;
-  body?: BodyInit | null;
-  accessToken?: string;
-  includeCredentials?: boolean;
-}
-
 type ProductSelectQuery = Pick<ProductsQuery, "select">;
-
-function buildQueryString(query?: Record<string, string | number | undefined>) {
-  if (!query) {
-    return "";
-  }
-
-  const searchParams = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(query)) {
-    if (value === undefined) {
-      continue;
-    }
-
-    searchParams.set(key, String(value));
-  }
-
-  const queryString = searchParams.toString();
-  return queryString ? `?${queryString}` : "";
-}
-
-function normalizeSelect(select?: string | string[]) {
-  if (!select) {
-    return undefined;
-  }
-
-  return Array.isArray(select) ? select.join(",") : select;
-}
 
 function getProductsQueryParams(query?: ProductsQuery) {
   if (!query) {
@@ -65,42 +32,10 @@ function getProductsQueryParams(query?: ProductsQuery) {
   return {
     limit: query.limit,
     skip: query.skip,
-    select: normalizeSelect(query.select),
+    select: normalizeQueryArrayValue(query.select),
     sortBy: query.sortBy,
     order: query.order,
   };
-}
-
-async function request<T>(path: string, options: RequestOptions = {}) {
-  const headers = new Headers();
-
-  if (options.body) {
-    headers.set("Content-Type", "application/json");
-  }
-
-  if (options.accessToken) {
-    headers.set("Authorization", `Bearer ${options.accessToken}`);
-  }
-
-  const response = await fetch(`${DUMMYJSON_BASE_URL}${path}`, {
-    method: options.method ?? "GET",
-    headers,
-    body: options.body,
-    credentials: options.includeCredentials ? "include" : "same-origin",
-  });
-
-  if (!response.ok) {
-    const fallbackMessage = `${response.status} ${response.statusText}`;
-
-    try {
-      const errorBody = (await response.json()) as { message?: string };
-      throw new Error(errorBody.message ?? fallbackMessage);
-    } catch {
-      throw new Error(fallbackMessage);
-    }
-  }
-
-  return (await response.json()) as T;
 }
 
 export function login(payload: LoginRequest) {
@@ -136,7 +71,7 @@ export function getProduct(
   query?: ProductSelectQuery,
 ) {
   const queryString = buildQueryString({
-    select: normalizeSelect(query?.select),
+    select: normalizeQueryArrayValue(query?.select),
   });
 
   return request<Product>(`/products/${params.id}${queryString}`);
@@ -147,7 +82,7 @@ export function searchProducts(query: SearchProductsQuery) {
     q: query.q,
     limit: query.limit,
     skip: query.skip,
-    select: normalizeSelect(query.select),
+    select: normalizeQueryArrayValue(query.select),
     sortBy: query.sortBy,
     order: query.order,
   });
