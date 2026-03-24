@@ -4,12 +4,14 @@ import { loginService } from "./login.service";
 import { authService } from "../auth";
 
 export const LoginContainer = () => {
-  const { rememberMe, setRememberMe, handleLogin, isLoading } = useUnit({
-    rememberMe: authService.models.$rememberMe,
-    setRememberMe: authService.events.setRememberMe,
-    handleLogin: loginService.effects.submitLoginFx,
-    isLoading: loginService.models.$isLoginPending,
-  });
+  const { rememberMe, setRememberMe, handleLogin, isLoading, errorMessage } =
+    useUnit({
+      rememberMe: authService.models.$rememberMe,
+      setRememberMe: authService.events.setRememberMe,
+      handleLogin: loginService.effects.submitLoginFx,
+      isLoading: loginService.models.$isLoginPending,
+      errorMessage: loginService.models.$loginErrorMessage,
+    });
 
   return (
     <LoginPage
@@ -17,6 +19,7 @@ export const LoginContainer = () => {
       setRememberMe={setRememberMe}
       handleLogin={handleLogin}
       isLoading={isLoading}
+      errorMessage={errorMessage}
     />
   );
 };

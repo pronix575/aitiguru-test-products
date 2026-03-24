@@ -1,4 +1,5 @@
-import { useState, type FC } from "react";
+import { message } from "antd";
+import { useEffect, useState, type FC } from "react";
 
 import { useFormik } from "formik";
 
@@ -35,15 +36,29 @@ export const LoginPage: FC<LoginPageProps> = ({
   rememberMe,
   setRememberMe,
   handleLogin,
+  isLoading,
+  errorMessage,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  
+
+  useEffect(() => {
+    if (!errorMessage) {
+      return;
+    }
+
+    void message.error(errorMessage);
+  }, [errorMessage]);
+
   const formik = useFormik<LoginFormValues>({
     initialValues: LOGIN_PAGE_INITIAL_VALUES,
     validationSchema: loginPageValidationSchema,
     validateOnMount: true,
-    onSubmit: (values) => {
-      handleLogin(values);
+    onSubmit: async (values) => {
+      try {
+        await handleLogin(values);
+      } catch {
+        return;
+      }
     },
   });
 
@@ -125,7 +140,7 @@ export const LoginPage: FC<LoginPageProps> = ({
           <PrimaryButton
             type="submit"
             disabled={!formik.isValid}
-            loading={formik.isSubmitting}
+            loading={isLoading}
           >
             Войти
           </PrimaryButton>

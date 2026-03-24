@@ -8,6 +8,7 @@ const AUTH_TOKEN_STORAGE_KEY = "auth-token";
 
 const setAuthToken = createEvent<string | null>();
 const setRememberMe = createEvent<boolean>();
+const handleLogout = createEvent();
 const hydrateAuth = createEvent<{ authToken: string; rememberMe: boolean }>();
 const syncStorage = createEvent<{
   localStorageToken: string | null;
@@ -27,6 +28,18 @@ const $isAuth = $authToken.map(Boolean);
 const $rememberMe = createStore(false)
   .on(setRememberMe, (_, remember) => remember)
   .on(hydrateAuth, (_, { rememberMe }) => rememberMe);
+
+sample({
+  clock: handleLogout,
+  fn: () => null,
+  target: setAuthToken,
+});
+
+sample({
+  clock: handleLogout,
+  fn: () => false,
+  target: setRememberMe,
+});
 
 const $localStorageAuthToken = createStore<string | null>(null).on(
   setLocalStorageAuthToken,
@@ -113,6 +126,7 @@ export const authService = {
     $rememberMe,
   },
   events: {
+    handleLogout,
     setAuthToken,
     setRememberMe,
   },

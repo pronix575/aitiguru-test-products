@@ -1,3 +1,5 @@
+import ky, { HTTPError } from "ky";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -8,6 +10,20 @@ export interface RequestOptions {
   accessToken?: string;
   includeCredentials?: boolean;
 }
+
+export class ApiError extends Error {
+  public readonly status?: number;
+
+  constructor(message: string, status?: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
+const apiClient = ky.create({
+  prefixUrl: API_BASE_URL,
+});
 
 export function buildQueryString(
   query?: Record<string, string | number | undefined>,
@@ -39,33 +55,49 @@ export function normalizeQueryArrayValue(value?: string | string[]) {
 }
 
 export async function request<T>(path: string, options: RequestOptions = {}) {
-  const headers = new Headers();
+  const headers: Record<string, string> = {};
 
   if (options.body) {
-    headers.set("Content-Type", "application/json");
+    headers["Content-Type"] = "application/json";
   }
 
   if (options.accessToken) {
-    headers.set("Authorization", `Bearer ${options.accessToken}`);
+    headers.Authorization = `Bearer ${options.accessToken}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: options.method ?? "GET",
-    headers,
-    body: options.body,
-    credentials: options.includeCredentials ? "include" : "same-origin",
-  });
+  try {
+    return await apiClient(path.replace(/^\//, ""), {
+      method: options.method ?? "GET",
+      headers,
+      body: options.body,
+      credentials: options.includeCredentials ? "include" : "same-origin",
+    }).json<T>();
+  } catch (error) {
+    if (error instanceof HTTPError) {
+      const fallbackMessage = `${error.response.status} ${error.response.statusText}`;
 
-  if (!response.ok) {
-    const fallbackMessage = `${response.status} ${response.statusText}`;
+      try {
+        const errorBody = (await error.response.clone().json()) as {
+          message?: string;
+        };
 
-    try {
-      const errorBody = (await response.json()) as { message?: string };
-      throw new Error(errorBody.message ?? fallbackMessage);
-    } catch {
-      throw new Error(fallbackMessage);
+        throw new ApiError(
+          errorBody.message ?? fallbackMessage,
+          error.response.status,
+        );
+      } catch (parsingError) {
+        if (parsingError instanceof ApiError) {
+          throw parsingError;
+        }
+
+        throw new ApiError(fallbackMessage, error.response.status);
+      }
     }
-  }
 
-  return (await response.json()) as T;
+    if (error instanceof Error) {
+      throw new ApiError(error.message);
+    }
+
+    throw new ApiError("Не удалось выполнить запрос");
+  }
 }

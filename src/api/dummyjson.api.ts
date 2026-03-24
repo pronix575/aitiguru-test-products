@@ -42,14 +42,12 @@ export function login(payload: LoginRequest) {
   return request<LoginResponse>("/auth/login", {
     method: "POST",
     body: JSON.stringify(payload),
-    includeCredentials: true,
   });
 }
 
 export function getAuthUser(accessToken: string) {
   return request<MeResponse>("/auth/me", {
     accessToken,
-    includeCredentials: true,
   });
 }
 
@@ -57,7 +55,6 @@ export function refreshAuthSession(payload: RefreshRequest = {}) {
   return request<RefreshResponse>("/auth/refresh", {
     method: "POST",
     body: JSON.stringify(payload),
-    includeCredentials: true,
   });
 }
 

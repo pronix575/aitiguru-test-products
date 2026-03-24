@@ -1,4 +1,4 @@
-import { attach, sample } from "effector";
+import { attach, createEvent, createStore, sample } from "effector";
 
 import { authService } from "@/services/auth";
 import { loginFx } from "./login.api";
@@ -12,6 +12,14 @@ const submitLoginFx = attach({
   }),
 });
 
+const resetLoginError = createEvent();
+
+const $loginErrorMessage = createStore<string | null>(null)
+  .on(submitLoginFx.failData, (_, error) =>
+    error instanceof Error ? error.message : "Не удалось выполнить вход",
+  )
+  .reset([submitLoginFx, resetLoginError]);
+
 sample({
   clock: submitLoginFx.doneData,
   fn: ({ accessToken }) => accessToken,
@@ -19,10 +27,14 @@ sample({
 });
 
 export const loginService = {
+  events: {
+    resetLoginError,
+  },
   effects: {
     submitLoginFx,
   },
   models: {
     $isLoginPending: submitLoginFx.pending,
+    $loginErrorMessage,
   },
 };

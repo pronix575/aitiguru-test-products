@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^6.3.4",
     "effector": "^23.4.4",
     "effector-react": "^23.3.0",
     "effector-storage": "^8.0.0",
     "formik": "^2.4.9",
+    "ky": "^1.14.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2",
