@@ -1,9 +1,25 @@
-import { Form, Wrapper } from "./LoginPage.styled";
+import { Logo } from "@/components/icons/Logo";
+import {
+  Form,
+  LogoWrapper,
+  Subtitle,
+  Title,
+  TitleWrapper,
+  Wrapper,
+} from "./LoginPage.styled";
 
 export const LoginPage = () => {
   return (
     <Wrapper>
-      <Form>hh</Form>
+      <Form>
+        <LogoWrapper>
+          <Logo />
+        </LogoWrapper>
+        <TitleWrapper>
+          <Title>Добро пожаловать!</Title>
+          <Subtitle>Пожалуйста, авторизируйтесь</Subtitle>
+        </TitleWrapper>
+      </Form>
     </Wrapper>
   );
 };
