@@ -4,8 +4,11 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(35, 35, 35, 0.05), transparent 45%),
+    linear-gradient(180deg, #fff 0%, #fbfbfb 100%);
 `;
 
 const neumorphismStyles = css`
@@ -36,17 +39,31 @@ const neumorphismStyles = css`
   }
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px;
   width: 100%;
   max-width: 528px;
+  padding: 48px;
   border-radius: 34px;
   gap: 32px;
+  overflow: hidden;
 
   ${neumorphismStyles}
+`;
+
+export const Content = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+`;
+
+export const Fields = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 export const LogoWrapper = styled.div`
@@ -65,9 +82,11 @@ export const TitleWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  text-align: center;
 `;
 
-export const Title = styled.div`
+export const Title = styled.h1`
+  margin: 0;
   font-weight: 600;
   font-size: 40px;
   line-height: 110%;
@@ -76,10 +95,63 @@ export const Title = styled.div`
   color: #232323;
 `;
 
-export const Subtitle = styled.div`
+export const Subtitle = styled.p`
+  margin: 0;
   font-weight: 500;
   font-size: 18px;
   line-height: 150%;
   text-align: center;
   color: var(--color-text-muted);
+`;
+
+export const RememberRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+export const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  color: #b6b6b6;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, rgba(225, 225, 225, 0.2), #e1e1e1);
+  }
+
+  &::after {
+    background: linear-gradient(90deg, #e1e1e1, rgba(225, 225, 225, 0.2));
+  }
+`;
+
+export const Footer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #707070;
+  font-size: 18px;
+  line-height: 1.4;
+`;
+
+export const FooterLink = styled.button`
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
 `;
