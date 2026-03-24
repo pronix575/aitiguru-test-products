@@ -2,6 +2,7 @@ import { useUnit } from "effector-react";
 import { Router } from "../Router";
 import { authService } from "@/services/auth";
 import { BrowserRouter } from "react-router-dom";
+import "@/services/user/user.service";
 
 const {
   gates: { AuthGate },

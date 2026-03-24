@@ -14,3 +14,9 @@ export const Header = styled(Panel)`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const ManageUserPanel = styled.div`
+  display: flex;
+  gap: 16px;
+  align-items: center;
+`;

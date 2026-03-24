@@ -2,27 +2,14 @@ import { combine, createEvent, createStore, sample } from "effector";
 import { persist as persistLocal } from "effector-storage/local";
 import { persist as persistSession } from "effector-storage/session";
 import { createGate } from "effector-react";
+import { spread } from "patronum/spread";
 import { configureAuthClient } from "@/api/api.client";
 import { checkAuthFx, refreshAuthFx } from "./auth.api";
-
-const AUTH_TOKEN_STORAGE_KEY = "auth-token";
-const REFRESH_TOKEN_STORAGE_KEY = "refresh-token";
-
-type AuthCredentials = {
-  authToken: string;
-  refreshToken: string;
-};
-
-type HydrateAuthPayload = AuthCredentials & {
-  rememberMe: boolean;
-};
-
-type SyncStoragePayload = {
-  localStorageToken: string | null;
-  localStorageRefreshToken: string | null;
-  sessionStorageToken: string | null;
-  sessionStorageRefreshToken: string | null;
-};
+import {
+  AUTH_TOKEN_STORAGE_KEY,
+  REFRESH_TOKEN_STORAGE_KEY,
+} from "./auth.constants";
+import type { HydrateAuthPayload, SyncStoragePayload } from "./auth.types";
 
 const setAuthToken = createEvent<string | null>();
 const setRefreshToken = createEvent<string | null>();
@@ -130,28 +117,14 @@ sample({
   target: syncStorage,
 });
 
-sample({
-  clock: syncStorage,
-  fn: ({ localStorageToken }) => localStorageToken,
-  target: setLocalStorageAuthToken,
-});
-
-sample({
-  clock: syncStorage,
-  fn: ({ sessionStorageToken }) => sessionStorageToken,
-  target: setSessionStorageAuthToken,
-});
-
-sample({
-  clock: syncStorage,
-  fn: ({ localStorageRefreshToken }) => localStorageRefreshToken,
-  target: setLocalStorageRefreshToken,
-});
-
-sample({
-  clock: syncStorage,
-  fn: ({ sessionStorageRefreshToken }) => sessionStorageRefreshToken,
-  target: setSessionStorageRefreshToken,
+spread({
+  source: syncStorage,
+  targets: {
+    localStorageToken: setLocalStorageAuthToken,
+    sessionStorageToken: setSessionStorageAuthToken,
+    localStorageRefreshToken: setLocalStorageRefreshToken,
+    sessionStorageRefreshToken: setSessionStorageRefreshToken,
+  },
 });
 
 // We only verify auth after hydration from storage. This keeps /auth/me from
