@@ -10,10 +10,26 @@ export interface RequestOptions {
   json?: unknown;
   accessToken?: string;
   includeCredentials?: boolean;
+  retryOnUnauthorized?: boolean;
 }
 
 type RequestContext = {
   accessToken?: string;
+  retryOnUnauthorized?: boolean;
+  isRetryAfterRefresh?: boolean;
+};
+
+type RefreshTokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+type AuthClientHandlers = {
+  getAccessToken: () => string | null;
+  getRefreshToken: () => string | null;
+  refreshToken: (refreshToken: string) => Promise<RefreshTokens>;
+  applyTokens: (tokens: RefreshTokens) => void;
+  clearAuth: () => void;
 };
 
 export class ApiError extends Error {
@@ -26,6 +42,12 @@ export class ApiError extends Error {
   }
 }
 
+let authClientHandlers: AuthClientHandlers | null = null;
+
+export function configureAuthClient(handlers: AuthClientHandlers) {
+  authClientHandlers = handlers;
+}
+
 const apiClient = ky.create({
   prefixUrl: API_BASE_URL,
   throwHttpErrors: false,
@@ -33,16 +55,50 @@ const apiClient = ky.create({
     beforeRequest: [
       (request, options) => {
         const context = options.context as RequestContext | undefined;
+        const accessToken =
+          context?.accessToken ?? authClientHandlers?.getAccessToken();
 
-        if (context?.accessToken) {
-          request.headers.set("Authorization", `Bearer ${context.accessToken}`);
+        if (accessToken) {
+          request.headers.set("Authorization", `Bearer ${accessToken}`);
         }
       },
     ],
     afterResponse: [
-      async (_request, _options, response) => {
+      async (request, options, response) => {
         if (response.ok) {
           return response;
+        }
+
+        const context = options.context as RequestContext | undefined;
+
+        if (
+          response.status === 401 &&
+          context?.retryOnUnauthorized !== false &&
+          !context?.isRetryAfterRefresh &&
+          authClientHandlers
+        ) {
+          const refreshToken = authClientHandlers.getRefreshToken();
+
+          if (refreshToken) {
+            try {
+              const refreshedTokens =
+                await authClientHandlers.refreshToken(refreshToken);
+
+              authClientHandlers.applyTokens(refreshedTokens);
+
+              return apiClient(request, {
+                ...options,
+                context: {
+                  ...context,
+                  accessToken: refreshedTokens.accessToken,
+                  isRetryAfterRefresh: true,
+                } satisfies RequestContext,
+              });
+            } catch {
+              authClientHandlers.clearAuth();
+              throw new ApiError("Сессия истекла. Войдите снова.", 401);
+            }
+          }
         }
 
         const fallbackMessage = `${response.status} ${response.statusText}`;
@@ -103,6 +159,7 @@ export async function request<T>(path: string, options: RequestOptions = {}) {
       credentials: options.includeCredentials ? "include" : "same-origin",
       context: {
         accessToken: options.accessToken,
+        retryOnUnauthorized: options.retryOnUnauthorized ?? true,
       } satisfies RequestContext,
     }).json<T>();
   } catch (error) {

@@ -55,6 +55,7 @@ export function refreshAuthSession(payload: RefreshRequest = {}) {
   return request<RefreshResponse>("/auth/refresh", {
     method: "POST",
     json: payload,
+    retryOnUnauthorized: false,
   });
 }
 

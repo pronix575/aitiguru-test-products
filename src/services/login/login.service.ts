@@ -26,6 +26,12 @@ sample({
   target: authService.events.setAuthToken,
 });
 
+sample({
+  clock: submitLoginFx.doneData,
+  fn: ({ refreshToken }) => refreshToken,
+  target: authService.events.setRefreshToken,
+});
+
 export const loginService = {
   events: {
     resetLoginError,
