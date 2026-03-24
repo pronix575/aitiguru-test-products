@@ -1,3 +1,9 @@
+import { Form, Wrapper } from "./LoginPage.styled";
+
 export const LoginPage = () => {
-  return <div>Login Page</div>;
+  return (
+    <Wrapper>
+      <Form>hh</Form>
+    </Wrapper>
+  );
 };
