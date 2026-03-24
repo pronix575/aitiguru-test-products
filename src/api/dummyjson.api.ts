@@ -41,7 +41,7 @@ function getProductsQueryParams(query?: ProductsQuery) {
 export function login(payload: LoginRequest) {
   return request<LoginResponse>("/auth/login", {
     method: "POST",
-    body: JSON.stringify(payload),
+    json: payload,
   });
 }
 
@@ -54,7 +54,7 @@ export function getAuthUser(accessToken: string) {
 export function refreshAuthSession(payload: RefreshRequest = {}) {
   return request<RefreshResponse>("/auth/refresh", {
     method: "POST",
-    body: JSON.stringify(payload),
+    json: payload,
   });
 }
 
@@ -108,7 +108,7 @@ export function getProductsByCategory(
 export function addProduct(payload: AddProductRequest) {
   return request<Product>("/products/add", {
     method: "POST",
-    body: JSON.stringify(payload),
+    json: payload,
   });
 }
 
@@ -118,7 +118,7 @@ export function updateProduct(
 ) {
   return request<Product>(`/products/${params.id}`, {
     method: "PUT",
-    body: JSON.stringify(payload),
+    json: payload,
   });
 }
 

@@ -62,6 +62,18 @@ export const LoginPage: FC<LoginPageProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (formik.submitCount === 0 || formik.isValid) {
+      return;
+    }
+
+    const firstValidationError = Object.values(formik.errors)[0];
+
+    if (typeof firstValidationError === "string") {
+      void message.error(firstValidationError);
+    }
+  }, [formik.submitCount, formik.isValid, formik.errors]);
+
   return (
     <Wrapper>
       <Form onSubmit={formik.handleSubmit}>
@@ -137,11 +149,7 @@ export const LoginPage: FC<LoginPageProps> = ({
             />
           </RememberRow>
 
-          <PrimaryButton
-            type="submit"
-            disabled={!formik.isValid}
-            loading={isLoading}
-          >
+          <PrimaryButton type="submit" loading={isLoading}>
             Войти
           </PrimaryButton>
 

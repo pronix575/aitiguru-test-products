@@ -1,4 +1,4 @@
-import ky, { HTTPError } from "ky";
+import ky from "ky";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -7,9 +7,14 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export interface RequestOptions {
   method?: HttpMethod;
   body?: BodyInit | null;
+  json?: unknown;
   accessToken?: string;
   includeCredentials?: boolean;
 }
+
+type RequestContext = {
+  accessToken?: string;
+};
 
 export class ApiError extends Error {
   public readonly status?: number;
@@ -23,6 +28,41 @@ export class ApiError extends Error {
 
 const apiClient = ky.create({
   prefixUrl: API_BASE_URL,
+  throwHttpErrors: false,
+  hooks: {
+    beforeRequest: [
+      (request, options) => {
+        const context = options.context as RequestContext | undefined;
+
+        if (context?.accessToken) {
+          request.headers.set("Authorization", `Bearer ${context.accessToken}`);
+        }
+      },
+    ],
+    afterResponse: [
+      async (_request, _options, response) => {
+        if (response.ok) {
+          return response;
+        }
+
+        const fallbackMessage = `${response.status} ${response.statusText}`;
+
+        try {
+          const errorBody = (await response.clone().json()) as {
+            message?: string;
+          };
+
+          throw new ApiError(errorBody.message ?? fallbackMessage, response.status);
+        } catch (error) {
+          if (error instanceof ApiError) {
+            throw error;
+          }
+
+          throw new ApiError(fallbackMessage, response.status);
+        }
+      },
+    ],
+  },
 });
 
 export function buildQueryString(
@@ -55,43 +95,19 @@ export function normalizeQueryArrayValue(value?: string | string[]) {
 }
 
 export async function request<T>(path: string, options: RequestOptions = {}) {
-  const headers: Record<string, string> = {};
-
-  if (options.body) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  if (options.accessToken) {
-    headers.Authorization = `Bearer ${options.accessToken}`;
-  }
-
   try {
     return await apiClient(path.replace(/^\//, ""), {
       method: options.method ?? "GET",
-      headers,
       body: options.body,
+      json: options.json,
       credentials: options.includeCredentials ? "include" : "same-origin",
+      context: {
+        accessToken: options.accessToken,
+      } satisfies RequestContext,
     }).json<T>();
   } catch (error) {
-    if (error instanceof HTTPError) {
-      const fallbackMessage = `${error.response.status} ${error.response.statusText}`;
-
-      try {
-        const errorBody = (await error.response.clone().json()) as {
-          message?: string;
-        };
-
-        throw new ApiError(
-          errorBody.message ?? fallbackMessage,
-          error.response.status,
-        );
-      } catch (parsingError) {
-        if (parsingError instanceof ApiError) {
-          throw parsingError;
-        }
-
-        throw new ApiError(fallbackMessage, error.response.status);
-      }
+    if (error instanceof ApiError) {
+      throw error;
     }
 
     if (error instanceof Error) {
