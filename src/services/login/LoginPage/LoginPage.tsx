@@ -25,6 +25,7 @@ import {
   Wrapper,
 } from "./LoginPage.styled";
 import {
+  LOGIN_PAGE_INITIAL_VALUES,
   loginPageValidationSchema,
   type LoginPageFormValues,
 } from "./LoginPage.constants";
@@ -32,13 +33,10 @@ import {
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const formik = useFormik<LoginPageFormValues>({
-    initialValues: {
-      login: "",
-      password: "",
-      remember: false,
-    },
+    initialValues: LOGIN_PAGE_INITIAL_VALUES,
     validationSchema: loginPageValidationSchema,
-    onSubmit: (values) => {
+    validateOnMount: true,
+    onSubmit: async (values) => {
       void values;
     },
   });
@@ -118,7 +116,13 @@ export const LoginPage = () => {
             />
           </RememberRow>
 
-          <PrimaryButton type="submit">Войти</PrimaryButton>
+          <PrimaryButton
+            type="submit"
+            disabled={!formik.isValid}
+            loading={formik.isSubmitting}
+          >
+            Войти
+          </PrimaryButton>
 
           <Divider>или</Divider>
 

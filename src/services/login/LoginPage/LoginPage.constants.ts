@@ -6,6 +6,12 @@ export type LoginPageFormValues = {
   remember: boolean;
 };
 
+export const LOGIN_PAGE_INITIAL_VALUES: LoginPageFormValues = {
+  login: "",
+  password: "",
+  remember: false,
+};
+
 export const loginPageValidationSchema = yup.object({
   login: yup
     .string()
