@@ -4,12 +4,15 @@
 
 ## Что здесь есть
 
-- `$authToken` — текущий токен в памяти приложения.
+- `$authToken` — текущий access token в памяти приложения.
+- `$refreshToken` — текущий refresh token в памяти приложения.
 - `$rememberMe` — флаг "запомнить меня".
 - `$isCheckingAuth` — признак фоновой проверки авторизации.
-- `setAuthToken` — вручную обновляет токен.
-- `setRememberMe` — переключает режим хранения токена.
-- `AuthGate` — триггерит проверку авторизации при входе в приложение.
+- `setAuthToken` — вручную обновляет access token.
+- `setRefreshToken` — вручную обновляет refresh token.
+- `setRememberMe` — переключает режим хранения токенов.
+- `handleLogout` — очищает auth-состояние.
+- `AuthGate` — gate приложения, который держится рядом с auth-модулем.
 
 ## Как работает storage
 
@@ -18,17 +21,22 @@
 - `localStorage` — если пользователь выбрал "запомнить меня".
 - `sessionStorage` — если пользователь не выбрал этот чекбокс.
 
-Для этого есть два технических store:
+Для этого есть технические store:
 
 - `$localStorageAuthToken`
 - `$sessionStorageAuthToken`
+- `$localStorageRefreshToken`
+- `$sessionStorageRefreshToken`
 
 Они синхронизируются с браузерным storage через `persist` из:
 
 - `effector-storage/local`
 - `effector-storage/session`
 
-Ключ хранения: `auth-token`.
+Ключи хранения:
+
+- `auth-token`
+- `refresh-token`
 
 ## Как происходит восстановление токена
 
@@ -36,12 +44,13 @@
 
 Дальше:
 
-- если токен пришел из `sessionStorage`, вызывается `hydrateAuth({ authToken, rememberMe: false })`
-- если токен пришел из `localStorage`, вызывается `hydrateAuth({ authToken, rememberMe: true })`
+- если пара токенов пришла из `sessionStorage`, вызывается `hydrateAuth({ authToken, refreshToken, rememberMe: false })`
+- если пара токенов пришла из `localStorage`, вызывается `hydrateAuth({ authToken, refreshToken, rememberMe: true })`
 
 `hydrateAuth` обновляет:
 
 - `$authToken`
+- `$refreshToken`
 - `$rememberMe`
 
 То есть основное auth-состояние всегда живет в обычных store приложения, а storage используется только как источник/приемник данных.
@@ -51,11 +60,12 @@
 Когда меняется:
 
 - `setAuthToken`
+- `setRefreshToken`
 - `setRememberMe`
 
 срабатывает `sample`, который формирует payload для `syncStorage`.
 
-`syncStorage` раскладывает токен так:
+`syncStorage` раскладывает токены так:
 
 - в `localStorage`, если `$rememberMe === true`
 - в `sessionStorage`, если `$rememberMe === false`
@@ -64,15 +74,28 @@
 
 ## Проверка авторизации
 
-Когда открывается `AuthGate`, если в `$authToken` уже есть значение, запускается `checkAuthFx`.
+После `hydrateAuth` запускается `checkAuthFx`.
 
-Это нужно, чтобы после перезагрузки приложения не просто доверять токену из storage, а проверить его на сервере.
+Это нужно, чтобы после перезагрузки приложения не просто доверять токенам из storage, а проверить access token на сервере.
+
+## Refresh token
+
+`auth.service` также настраивает API-клиент через `configureAuthClient(...)`.
+
+Когда API отвечает `401`:
+
+- клиент берет текущий `refreshToken`
+- вызывает `refreshAuthFx`
+- обновляет `$authToken` и `$refreshToken`
+- повторяет исходный запрос
+
+Если refresh не удался, вызывается `handleLogout`.
 
 ## Почему сделано именно так
 
 Такой подход разделяет ответственность:
 
-- `$authToken` и `$rememberMe` — бизнес-состояние
-- `$localStorageAuthToken` и `$sessionStorageAuthToken` — инфраструктурные store для persistence
+- `$authToken`, `$refreshToken` и `$rememberMe` — бизнес-состояние
+- технические storage-store — инфраструктурный слой для persistence
 
-За счет этого UI и остальные модули работают только с основными auth-store и не зависят напрямую от того, где именно лежит токен.
+За счет этого UI и остальные модули работают только с основными auth-store и не зависят напрямую от того, где именно лежат токены.

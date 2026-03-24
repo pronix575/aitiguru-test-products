@@ -8,21 +8,28 @@ import { checkAuthFx, refreshAuthFx } from "./auth.api";
 const AUTH_TOKEN_STORAGE_KEY = "auth-token";
 const REFRESH_TOKEN_STORAGE_KEY = "refresh-token";
 
-const setAuthToken = createEvent<string | null>();
-const setRefreshToken = createEvent<string | null>();
-const setRememberMe = createEvent<boolean>();
-const handleLogout = createEvent();
-const hydrateAuth = createEvent<{
+type AuthCredentials = {
   authToken: string;
   refreshToken: string;
+};
+
+type HydrateAuthPayload = AuthCredentials & {
   rememberMe: boolean;
-}>();
-const syncStorage = createEvent<{
+};
+
+type SyncStoragePayload = {
   localStorageToken: string | null;
   localStorageRefreshToken: string | null;
   sessionStorageToken: string | null;
   sessionStorageRefreshToken: string | null;
-}>();
+};
+
+const setAuthToken = createEvent<string | null>();
+const setRefreshToken = createEvent<string | null>();
+const setRememberMe = createEvent<boolean>();
+const handleLogout = createEvent();
+const hydrateAuth = createEvent<HydrateAuthPayload>();
+const syncStorage = createEvent<SyncStoragePayload>();
 const setLocalStorageAuthToken = createEvent<string | null>();
 const setSessionStorageAuthToken = createEvent<string | null>();
 const setLocalStorageRefreshToken = createEvent<string | null>();
@@ -32,36 +39,23 @@ const AuthGate = createGate();
 
 const $authToken = createStore<string | null>(null)
   .on(setAuthToken, (_, token) => token)
-  .on(hydrateAuth, (_, { authToken }) => authToken);
+  .on(hydrateAuth, (_, { authToken }) => authToken)
+  .reset(handleLogout);
 
 const $refreshToken = createStore<string | null>(null)
   .on(setRefreshToken, (_, token) => token)
-  .on(hydrateAuth, (_, { refreshToken }) => refreshToken);
+  .on(hydrateAuth, (_, { refreshToken }) => refreshToken)
+  .reset(handleLogout);
 
 const $isAuth = $authToken.map(Boolean);
 
 const $rememberMe = createStore(false)
   .on(setRememberMe, (_, remember) => remember)
-  .on(hydrateAuth, (_, { rememberMe }) => rememberMe);
+  .on(hydrateAuth, (_, { rememberMe }) => rememberMe)
+  .reset(handleLogout);
 
-sample({
-  clock: handleLogout,
-  fn: () => null,
-  target: setAuthToken,
-});
-
-sample({
-  clock: handleLogout,
-  fn: () => null,
-  target: setRefreshToken,
-});
-
-sample({
-  clock: handleLogout,
-  fn: () => false,
-  target: setRememberMe,
-});
-
+// These stores exist only to bridge effector-storage with the real auth model.
+// The app itself should read from $authToken/$refreshToken instead.
 const $localStorageAuthToken = createStore<string | null>(null).on(
   setLocalStorageAuthToken,
   (_, token) => token,
@@ -92,6 +86,8 @@ const $localStorageCredentials = combine({
   refreshToken: $localStorageRefreshToken,
 });
 
+// Storage restores tokens independently, so we wait until both values are present
+// and only then hydrate the in-memory auth model once.
 sample({
   clock: $sessionStorageCredentials.updates,
   source: $sessionStorageCredentials,
@@ -116,6 +112,8 @@ sample({
   target: hydrateAuth,
 });
 
+// Whenever auth state changes, keep exactly one storage active:
+// localStorage for "remember me", sessionStorage otherwise.
 sample({
   clock: [setAuthToken, setRefreshToken, setRememberMe],
   source: {
@@ -156,6 +154,8 @@ sample({
   target: setSessionStorageRefreshToken,
 });
 
+// We only verify auth after hydration from storage. This keeps /auth/me from
+// firing multiple times on app mount while still validating restored tokens.
 sample({
   clock: hydrateAuth,
   fn: ({ authToken }) => authToken,
@@ -204,6 +204,8 @@ persistLocal({
   key: REFRESH_TOKEN_STORAGE_KEY,
 });
 
+// The API client uses these handlers to refresh tokens on 401 and retry the
+// original request without leaking refresh logic into feature modules.
 configureAuthClient({
   getAccessToken: () => $authToken.getState(),
   getRefreshToken: () => $refreshToken.getState(),
