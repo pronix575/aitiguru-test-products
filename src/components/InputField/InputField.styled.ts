@@ -3,12 +3,12 @@ import styled from "styled-components";
 export const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 `;
 
 export const Label = styled.label`
   font-weight: 500;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.3;
   color: #232323;
 `;
@@ -16,11 +16,11 @@ export const Label = styled.label`
 export const InputShell = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 54px;
-  padding: 0 12px;
+  gap: 10px;
+  min-height: 43px;
+  padding: 0 10px;
   border: 1px solid #e8e8e8;
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.92);
   transition:
     border-color 0.2s ease,
@@ -31,13 +31,13 @@ export const InputShell = styled.div`
     border-color: rgba(51, 68, 232, 0.35);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      0 0 0 4px rgba(51, 68, 232, 0.08),
-      0 8px 24px rgba(0, 0, 0, 0.03);
+      0 0 0 3px rgba(51, 68, 232, 0.08),
+      0 6px 19px rgba(0, 0, 0, 0.03);
   }
 
   @media (max-width: 768px) {
-    min-height: 54px;
-    padding: 0 18px;
+    min-height: 43px;
+    padding: 0 14px;
   }
 `;
 
@@ -47,6 +47,11 @@ export const InputIcon = styled.span`
   justify-content: center;
   color: #c6c6c6;
   flex-shrink: 0;
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 export const StyledInput = styled.input`
@@ -55,7 +60,7 @@ export const StyledInput = styled.input`
   background: transparent;
   padding: 0;
   font: inherit;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.4;
   color: #232323;
 
@@ -68,7 +73,7 @@ export const StyledInput = styled.input`
   }
 
   @media (max-width: 768px) {
-    font-size: 18px;
+    font-size: 14px;
   }
 `;
 
@@ -86,5 +91,10 @@ export const ActionButton = styled.button`
 
   &:hover {
     color: #7e7e7e;
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
   }
 `;

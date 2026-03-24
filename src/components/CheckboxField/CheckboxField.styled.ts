@@ -4,7 +4,7 @@ export const Root = styled.label`
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 11px;
   cursor: pointer;
 `;
 
@@ -15,9 +15,9 @@ export const HiddenInput = styled.input`
 `;
 
 export const Box = styled.span`
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
+  width: 21px;
+  height: 21px;
+  border-radius: 6px;
   border: 1px solid #d9d9d9;
   background: rgba(255, 255, 255, 0.95);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -31,8 +31,8 @@ export const Box = styled.span`
 
   &::after {
     content: "";
-    width: 12px;
-    height: 7px;
+    width: 10px;
+    height: 6px;
     border-left: 2px solid transparent;
     border-bottom: 2px solid transparent;
     transform: rotate(-45deg) translateY(-1px);
@@ -42,7 +42,7 @@ export const Box = styled.span`
   ${HiddenInput}:checked + & {
     border-color: var(--color-primary);
     background: rgba(51, 68, 232, 0.08);
-    box-shadow: 0 0 0 3px rgba(51, 68, 232, 0.08);
+    box-shadow: 0 0 0 2px rgba(51, 68, 232, 0.08);
   }
 
   ${HiddenInput}:checked + &::after {
@@ -52,7 +52,7 @@ export const Box = styled.span`
 
 export const Text = styled.span`
   font-weight: 500;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--color-text-muted);
 `;
