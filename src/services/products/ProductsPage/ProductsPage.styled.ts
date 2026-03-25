@@ -37,9 +37,9 @@ export const SearchInput = styled(Input)`
     padding-inline: 18px;
     border: 0;
     border-radius: 8px;
-    background: #f3f3f3;
+    background: var(--color-background-input);
     box-shadow: none;
-    color: #999999;
+    color: var(--color-text-muted);
     font-size: 16px;
   }
 `;
@@ -68,5 +68,5 @@ export const Title = styled.div<{ size: "small" | "medium" | "large" }>`
         return "20px";
     }
   }};
-  color: #202020;
+  color: var(--color-text-primary);
 `;

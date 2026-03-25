@@ -18,9 +18,9 @@ export const Box = styled.span`
   width: 21px;
   height: 21px;
   border-radius: 6px;
-  border: 1px solid #d9d9d9;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-white-alpha-90);
+  box-shadow: inset 0 1px 0 var(--color-white-alpha-90);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -41,8 +41,8 @@ export const Box = styled.span`
 
   ${HiddenInput}:checked + & {
     border-color: var(--color-primary);
-    background: rgba(51, 68, 232, 0.08);
-    box-shadow: 0 0 0 2px rgba(51, 68, 232, 0.08);
+    background: var(--color-primary-alpha-08);
+    box-shadow: 0 0 0 2px var(--color-primary-alpha-08);
   }
 
   ${HiddenInput}:checked + &::after {

@@ -8,9 +8,13 @@ export const StyledButton = styled.button<StyledButtonProps>`
   position: relative;
   width: 100%;
   min-height: 43px;
-  border: 1px solid #4e5dff;
+  border: 1px solid var(--color-primary-light);
   border-radius: 10px;
-  background: linear-gradient(180deg, #4252ff 0%, #2f3fdd 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-primary-light) 0%,
+    var(--color-primary-dark) 100%
+  );
   font-weight: 600;
   font-size: 18px;
   line-height: 1;
@@ -22,21 +26,25 @@ export const StyledButton = styled.button<StyledButtonProps>`
   &:hover {
     background: ${({ disabled, $loading }) =>
       disabled || $loading
-        ? "linear-gradient(180deg, #9da8ff 0%, #8f9af0 100%)"
-        : "linear-gradient(180deg, #4e5dff 0%, #4252ff 100%)"};
+        ? `linear-gradient(180deg, var(--color-primary-soft) 0%, var(--color-primary-soft) 100%)`
+        : `linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary) 100%)`};
   }
 
   &:active {
     box-shadow: ${({ disabled, $loading }) =>
       disabled || $loading
         ? "none"
-        : "inset 0 1px 0 rgba(255, 255, 255, 0.22)"};
+        : "inset 0 1px 0 var(--color-white-alpha-22)"};
   }
 
   &:disabled {
-    border-color: #aeb5f8;
-    background: linear-gradient(180deg, #b4bcff 0%, #a3acf0 100%);
-    color: rgba(255, 255, 255, 0.88);
+    border-color: var(--color-primary-soft);
+    background: linear-gradient(
+      180deg,
+      var(--color-primary-soft) 0%,
+      var(--color-primary-soft) 100%
+    );
+    color: var(--color-white-alpha-90);
     box-shadow: none;
   }
 
@@ -63,8 +71,8 @@ export const Loader = styled.span`
     content: "";
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #ffffff;
+    border: 2px solid var(--color-white-alpha-35);
+    border-top-color: var(--color-white);
     border-radius: 50%;
     animation: primary-button-spin 0.7s linear infinite;
   }

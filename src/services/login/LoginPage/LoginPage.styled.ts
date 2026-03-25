@@ -7,17 +7,25 @@ export const Wrapper = styled.div`
   min-height: 100vh;
   padding: 19px;
   background:
-    radial-gradient(circle at top, rgba(35, 35, 35, 0.05), transparent 45%),
-    linear-gradient(180deg, #fff 0%, #fbfbfb 100%);
+    radial-gradient(circle at top, var(--color-dark-alpha-05), transparent 45%),
+    linear-gradient(
+      180deg,
+      var(--color-white) 0%,
+      var(--color-background-soft) 100%
+    );
 `;
 
 export const neumorphismStyles = css`
   position: relative;
-  background: linear-gradient(180deg, #23232308 0%, rgba(35, 35, 35, 0) 50%);
-  outline: 5px solid white;
+  background: linear-gradient(
+    180deg,
+    var(--color-dark-alpha-03) 0%,
+    var(--color-dark-alpha-0) 50%
+  );
+  outline: 5px solid var(--color-white);
   box-shadow:
-    0 19px 26px 0 rgba(0, 0, 0, 0.04),
-    0 -10px 26px 0 rgba(0, 0, 0, 0.04);
+    0 19px 26px 0 var(--color-shadow-card),
+    0 -10px 26px 0 var(--color-shadow-card);
 
   &::before {
     content: "";
@@ -32,8 +40,8 @@ export const neumorphismStyles = css`
     );
     pointer-events: none;
     -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
+      linear-gradient(var(--color-white) 0 0) content-box,
+      linear-gradient(var(--color-white) 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
@@ -103,7 +111,7 @@ export const Title = styled.h1`
   line-height: 110%;
   letter-spacing: -0.01em;
   text-align: center;
-  color: #232323;
+  color: var(--color-text-primary);
 `;
 
 export const Subtitle = styled.p`
@@ -126,7 +134,7 @@ export const Divider = styled.div`
   align-items: center;
   gap: 13px;
   width: 100%;
-  color: #b6b6b6;
+  color: var(--color-text-subtle);
   font-weight: 600;
   font-size: 13px;
   text-transform: uppercase;
@@ -136,11 +144,19 @@ export const Divider = styled.div`
     content: "";
     height: 1px;
     flex: 1;
-    background: linear-gradient(90deg, rgba(225, 225, 225, 0.2), #e1e1e1);
+    background: linear-gradient(
+      90deg,
+      var(--color-gray-alpha-20),
+      var(--color-border-strong)
+    );
   }
 
   &::after {
-    background: linear-gradient(90deg, #e1e1e1, rgba(225, 225, 225, 0.2));
+    background: linear-gradient(
+      90deg,
+      var(--color-border-strong),
+      var(--color-gray-alpha-20)
+    );
   }
 `;
 
@@ -150,7 +166,7 @@ export const Footer = styled.div`
   align-items: baseline;
   gap: 8px;
   flex-wrap: wrap;
-  color: #707070;
+  color: var(--color-text-secondary);
   font-size: 14px;
   line-height: 1.4;
 `;

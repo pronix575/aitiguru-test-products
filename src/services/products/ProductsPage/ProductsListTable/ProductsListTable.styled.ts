@@ -27,7 +27,7 @@ export const HeaderRow = styled.div`
   gap: 24px;
   min-height: 58px;
   border-bottom: 1px solid var(--color-border);
-  color: #aeb3bd;
+  color: var(--color-text-subtle);
   font-size: 14px;
   font-weight: 700;
   padding: 0 18px;
@@ -63,7 +63,7 @@ export const Footer = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  color: #595d66;
+  color: var(--color-text-secondary);
   font-size: 16px;
 `;
 
@@ -96,10 +96,10 @@ export const PaginationControl = styled(Pagination)`
 `;
 
 export const ShowProductsAmount = styled.span`
-  color: #969b9fff;
+  color: var(--color-text-muted);
   font-weight: 300;
 `;
 
 export const AcсentText = styled.span`
-  color: #333333;
+  color: var(--color-text-primary);
 `;

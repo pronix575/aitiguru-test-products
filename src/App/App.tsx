@@ -14,10 +14,10 @@ export function App() {
   const isCheckingAuth = useUnit(authService.models.$isCheckingAuth);
   const primaryColor =
     typeof window === "undefined"
-      ? "#3344e8"
+      ? "var(--color-primary)"
       : getComputedStyle(document.documentElement)
           .getPropertyValue("--color-primary")
-          .trim() || "#3344e8";
+          .trim() || "var(--color-primary)";
 
   return (
     <ConfigProvider

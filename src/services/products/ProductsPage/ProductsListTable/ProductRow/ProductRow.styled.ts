@@ -35,7 +35,8 @@ export const Checkbox = styled.button<TableCheckboxProps>`
   height: 24px;
   border-radius: 6px;
   border: 1.5px solid
-    ${({ $checked }) => ($checked ? "var(--color-primary)" : "#c7ccd6")};
+    ${({ $checked }) =>
+      $checked ? "var(--color-primary)" : "var(--color-border-strong)"};
   background: ${({ $checked }) =>
     $checked ? "var(--color-primary)" : "transparent"};
   position: relative;
@@ -68,7 +69,7 @@ export const Thumbnail = styled.div`
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 9px;
-  background: #d9d9d9;
+  background: var(--color-border-strong);
 `;
 
 export const ThumbnailImage = styled.img`
@@ -86,7 +87,7 @@ export const ProductTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #26282d;
+  color: var(--color-text-primary);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
@@ -96,20 +97,20 @@ export const ProductCategory = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #b8bcc5;
+  color: var(--color-text-subtle);
   font-size: 14px;
   line-height: 1.3;
   margin-top: 2px;
 `;
 
 export const BoldText = styled.div`
-  color: #202020;
+  color: var(--color-text-primary);
   font-size: 16px;
   font-weight: 700;
 `;
 
 export const ValueText = styled.div`
-  color: #202020;
+  color: var(--color-text-primary);
   font-size: 16px;
   line-height: 1.3;
 `;
@@ -118,7 +119,7 @@ export const RatingValue = styled(ValueText)<{ $isLow: boolean }>`
   ${({ $isLow }) =>
     $isLow &&
     css`
-      color: #ff3b30;
+      color: var(--color-error);
     `}
 `;
 
@@ -128,7 +129,7 @@ export const PriceValue = styled(ValueText)`
   font-family: monospace;
 
   .float {
-    color: #999999;
+    color: var(--color-text-muted);
   }
 `;
 
@@ -155,8 +156,8 @@ export const MoreButton = styled(Button)`
     align-items: center;
     justify-content: center;
     border-width: 2px;
-    border-color: #b8bcc5;
-    color: #b8bcc5;
+    border-color: var(--color-text-subtle);
+    color: var(--color-text-subtle);
     background: transparent;
     box-shadow: none;
   }

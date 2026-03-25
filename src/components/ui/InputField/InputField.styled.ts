@@ -10,7 +10,7 @@ export const Label = styled.label`
   font-weight: 500;
   font-size: 14px;
   line-height: 1.3;
-  color: #232323;
+  color: var(--color-text-primary);
 `;
 
 type InputShellProps = {
@@ -23,9 +23,10 @@ export const InputShell = styled.div<InputShellProps>`
   gap: 10px;
   min-height: 43px;
   padding: 0 10px;
-  border: 1px solid ${({ $hasError }) => ($hasError ? "#e16565" : "#e8e8e8")};
+  border: 1px solid
+    ${({ $hasError }) => ($hasError ? "var(--color-error)" : "var(--color-border)")};
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--color-white-alpha-90);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -33,13 +34,17 @@ export const InputShell = styled.div<InputShellProps>`
 
   &:focus-within {
     border-color: ${({ $hasError }) =>
-      $hasError ? "rgba(225, 101, 101, 0.9)" : "rgba(51, 68, 232, 0.35)"};
+      $hasError
+        ? "var(--color-error-alpha-90)"
+        : "var(--color-primary-alpha-35)"};
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 1px 0 var(--color-white-alpha-90),
       0 0 0 3px
         ${({ $hasError }) =>
-          $hasError ? "rgba(225, 101, 101, 0.12)" : "rgba(51, 68, 232, 0.08)"},
-      0 6px 19px rgba(0, 0, 0, 0.03);
+          $hasError
+            ? "var(--color-error-alpha-12)"
+            : "var(--color-primary-alpha-08)"},
+      0 6px 19px var(--color-shadow-subtle);
   }
 
   @media (max-width: 768px) {
@@ -52,7 +57,7 @@ export const InputIcon = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #c6c6c6;
+  color: var(--color-text-subtle);
   flex-shrink: 0;
 
   svg {
@@ -69,10 +74,10 @@ export const StyledInput = styled.input`
   font: inherit;
   font-size: 16px;
   line-height: 1.4;
-  color: #232323;
+  color: var(--color-text-primary);
 
   &::placeholder {
-    color: #c4c4c4;
+    color: var(--color-text-placeholder);
   }
 
   &:focus {
@@ -91,13 +96,13 @@ export const ActionButton = styled.button`
   padding: 0;
   border: none;
   background: transparent;
-  color: #c6c6c6;
+  color: var(--color-text-subtle);
   cursor: pointer;
   transition: color 0.2s ease;
   flex-shrink: 0;
 
   &:hover {
-    color: #7e7e7e;
+    color: var(--color-text-secondary);
   }
 
   svg {
@@ -109,5 +114,5 @@ export const ActionButton = styled.button`
 export const ErrorMessage = styled.div`
   font-size: 12px;
   line-height: 1.3;
-  color: #e16565;
+  color: var(--color-error);
 `;
