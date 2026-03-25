@@ -1,15 +1,19 @@
 import { useState } from "react";
 import type { ProductsResponse } from "@/api/dummyjson.types";
 
-export function useProductsListTable(products: ProductsResponse) {
+export function useProductsListTable(products: ProductsResponse | null) {
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
+  const productsList = products?.products ?? [];
+  const productsLimit = products?.limit ?? 0;
+  const productsSkip = products?.skip ?? 0;
+  const productsTotal = products?.total ?? 0;
 
-  const currentPage = Math.floor(products.skip / products.limit) + 1;
+  const currentPage =
+    productsLimit > 0 ? Math.floor(productsSkip / productsLimit) + 1 : 1;
   const allSelected =
-    products.products.length > 0 &&
-    selectedProductIds.length === products.products.length;
-  const rangeStart = products.skip + 1;
-  const rangeEnd = Math.min(products.skip + products.products.length, products.total);
+    productsList.length > 0 && selectedProductIds.length === productsList.length;
+  const rangeStart = productsTotal > 0 ? productsSkip + 1 : 0;
+  const rangeEnd = Math.min(productsSkip + productsList.length, productsTotal);
 
   const toggleProduct = (productId: number) => {
     setSelectedProductIds((currentIds) =>
@@ -21,9 +25,9 @@ export function useProductsListTable(products: ProductsResponse) {
 
   const toggleAllProducts = () => {
     setSelectedProductIds((currentIds) =>
-      currentIds.length === products.products.length
+      currentIds.length === productsList.length
         ? []
-        : products.products.map((product) => product.id),
+        : productsList.map((product) => product.id),
     );
   };
 

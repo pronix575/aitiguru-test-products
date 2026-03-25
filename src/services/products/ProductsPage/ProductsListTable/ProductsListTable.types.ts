@@ -5,7 +5,7 @@ export type Props = {
   isLoading: boolean;
   onPageChange: (page: number) => void;
   onSortChange: (field: ProductSortField) => void;
-  products: ProductsResponse;
+  products: ProductsResponse | null;
   sortBy?: ProductSortField;
   sortOrder?: ProductSortOrder;
 };

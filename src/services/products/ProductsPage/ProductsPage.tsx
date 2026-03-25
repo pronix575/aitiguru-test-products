@@ -21,6 +21,7 @@ import { Button } from "antd";
 export const ProductsPage: FC<Props> = ({
   productsList,
   isLoading,
+  onAddProductClick,
   onPageChange,
   onReload,
   onSearchChange,
@@ -52,21 +53,23 @@ export const ProductsPage: FC<Props> = ({
               loading={isLoading}
               onClick={onReload}
             />
-            <Button type="primary" icon={<PlusCircleOutlined />}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={onAddProductClick}
+            >
               Добавить
             </Button>
           </HeaderActions>
         </ProductsHeader>
-        {productsList && (
-          <ProductsListTable
-            products={productsList}
-            isLoading={isLoading}
-            onPageChange={onPageChange}
-            onSortChange={onSortChange}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-          />
-        )}
+        <ProductsListTable
+          products={productsList}
+          isLoading={isLoading}
+          onPageChange={onPageChange}
+          onSortChange={onSortChange}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+        />
       </ProductsList>
     </Wrapper>
   );

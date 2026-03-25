@@ -2,6 +2,7 @@ import type { ProductsResponse } from "@/api";
 import type { ProductSortField, ProductSortOrder } from "../products.types";
 
 export type Props = {
+  onAddProductClick: () => void;
   isLoading: boolean;
   onReload: () => void;
   onPageChange: (page: number) => void;

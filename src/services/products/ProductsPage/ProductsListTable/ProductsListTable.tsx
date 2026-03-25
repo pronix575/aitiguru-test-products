@@ -33,6 +33,9 @@ export const ProductsListTable: FC<Props> = ({
   sortBy,
   sortOrder,
 }) => {
+  const productsList = products?.products ?? [];
+  const totalProducts = products?.total ?? 0;
+  const productsLimit = products?.limit ?? PRODUCT_ROW_SCELETONS_AMOUNT;
   const {
     allSelected,
     currentPage,
@@ -88,7 +91,7 @@ export const ProductsListTable: FC<Props> = ({
               ? Array.from({ length: PRODUCT_ROW_SCELETONS_AMOUNT }).map(
                   (_, index) => <ProductRowSceleton key={index} />,
                 )
-              : products.products.map((product) => {
+              : productsList.map((product) => {
                   const isSelected = selectedProductIds.includes(product.id);
 
                   return (
@@ -110,15 +113,15 @@ export const ProductsListTable: FC<Props> = ({
           <AcсentText>
             {rangeStart}-{rangeEnd}
           </AcсentText>{" "}
-          из <AcсentText>{products.total}</AcсentText>
+          из <AcсentText>{totalProducts}</AcсentText>
         </ShowProductsAmount>
         <PaginationControl
           current={currentPage}
-          defaultPageSize={products.limit}
+          defaultPageSize={productsLimit}
           disabled={isLoading}
           hideOnSinglePage
           showSizeChanger={false}
-          total={products.total}
+          total={totalProducts}
           onChange={onPageChange}
         />
       </Footer>

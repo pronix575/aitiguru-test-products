@@ -1,4 +1,5 @@
 import { useUnit } from "effector-react";
+import { AddProductContainer, addProductService } from "./addProduct";
 import { productsService } from "./products.service";
 import { ProductsPage } from "./ProductsPage";
 
@@ -8,10 +9,15 @@ const {
   events,
 } = productsService;
 
+const {
+  events: { openAddProductDrawer },
+} = addProductService;
+
 export const ProductsContainer = () => {
   const {
     productsList,
     isLoading,
+    onAddProductClick,
     setProductsPage,
     queryParams,
     searchQuery,
@@ -21,6 +27,7 @@ export const ProductsContainer = () => {
   } = useUnit({
     productsList: models.$productsPagedList,
     isLoading: models.$isProductsLoading,
+    onAddProductClick: openAddProductDrawer,
     setProductsPage: events.setProductsPage,
     queryParams: models.$productsQueryParams,
     searchQuery: models.$productsSearchQuery,
@@ -32,9 +39,11 @@ export const ProductsContainer = () => {
   return (
     <>
       <ProductsGate />
+      <AddProductContainer />
       <ProductsPage
         productsList={productsList}
         isLoading={isLoading}
+        onAddProductClick={onAddProductClick}
         onPageChange={setProductsPage}
         onReload={onReload}
         onSearchChange={onSearchChange}
