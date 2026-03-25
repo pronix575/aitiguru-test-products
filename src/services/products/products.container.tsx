@@ -14,6 +14,7 @@ export const ProductsContainer = () => {
     isLoading,
     setProductsPage,
     queryParams,
+    searchQuery,
     onReload,
     onSearchChange,
     onSortChange,
@@ -22,6 +23,7 @@ export const ProductsContainer = () => {
     isLoading: models.$isProductsLoading,
     setProductsPage: events.setProductsPage,
     queryParams: models.$productsQueryParams,
+    searchQuery: models.$productsSearchQuery,
     onReload: events.reloadProducts,
     onSearchChange: events.setProductsSearchQuery,
     onSortChange: events.toggleProductsSort,
@@ -37,7 +39,7 @@ export const ProductsContainer = () => {
         onReload={onReload}
         onSearchChange={onSearchChange}
         onSortChange={onSortChange}
-        searchQuery={queryParams.q}
+        searchQuery={searchQuery}
         sortBy={queryParams.sortBy}
         sortOrder={queryParams.order}
       />

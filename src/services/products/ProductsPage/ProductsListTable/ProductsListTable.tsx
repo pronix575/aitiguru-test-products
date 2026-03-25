@@ -19,8 +19,11 @@ import {
 } from "./ProductsListTable.styled";
 import { Checkbox } from "./ProductRow/ProductRow.styled";
 import { ProductRow } from "./ProductRow";
+import { ProductRowSceleton } from "./ProductRow/ProductRowSceleton";
 import { useProductsListTable } from "./ProductsListTable.hook";
 import type { Props } from "./ProductsListTable.types";
+
+const PRODUCT_ROW_SCELETONS_AMOUNT = 5;
 
 export const ProductsListTable: FC<Props> = ({
   products,
@@ -81,18 +84,22 @@ export const ProductsListTable: FC<Props> = ({
           </HeaderRow>
 
           <Body>
-            {products.products.map((product) => {
-              const isSelected = selectedProductIds.includes(product.id);
+            {isLoading
+              ? Array.from({ length: PRODUCT_ROW_SCELETONS_AMOUNT }).map(
+                  (_, index) => <ProductRowSceleton key={index} />,
+                )
+              : products.products.map((product) => {
+                  const isSelected = selectedProductIds.includes(product.id);
 
-              return (
-                <ProductRow
-                  key={product.id}
-                  isSelected={isSelected}
-                  product={product}
-                  onToggle={() => toggleProduct(product.id)}
-                />
-              );
-            })}
+                  return (
+                    <ProductRow
+                      key={product.id}
+                      isSelected={isSelected}
+                      product={product}
+                      onToggle={() => toggleProduct(product.id)}
+                    />
+                  );
+                })}
           </Body>
         </Table>
       </TableScroll>
