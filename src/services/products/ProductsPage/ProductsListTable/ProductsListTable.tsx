@@ -1,10 +1,12 @@
 import type { FC } from "react";
 import {
+  AcсentText,
   Body,
   Cell,
   Footer,
   HeaderRow,
   PaginationControl,
+  ShowProductsAmount,
   Table,
   TableScroll,
   Wrapper,
@@ -69,9 +71,13 @@ export const ProductsListTable: FC<Props> = ({
       </TableScroll>
 
       <Footer>
-        <span>
-          Показано {rangeStart}-{rangeEnd} из {products.total}
-        </span>
+        <ShowProductsAmount>
+          Показано{" "}
+          <AcсentText>
+            {rangeStart}-{rangeEnd}
+          </AcсentText>{" "}
+          из <AcсentText>{products.total}</AcсentText>
+        </ShowProductsAmount>
         <PaginationControl
           current={currentPage}
           defaultPageSize={products.limit}

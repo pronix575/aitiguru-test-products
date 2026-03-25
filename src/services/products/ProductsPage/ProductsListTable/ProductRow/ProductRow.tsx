@@ -1,3 +1,4 @@
+import { EllipsisOutlined, PlusOutlined } from "@ant-design/icons";
 import type { FC } from "react";
 import {
   AddButton,
@@ -65,15 +66,20 @@ export const ProductRow: FC<Props> = ({ isSelected, product, onToggle }) => {
       </Cell>
 
       <Cell>
-        <AddButton type="button" aria-label={`Добавить ${product.title}`}>
-          +
-        </AddButton>
+        <AddButton
+          type="primary"
+          shape="round"
+          icon={<PlusOutlined />}
+          aria-label={`Добавить ${product.title}`}
+        />
       </Cell>
 
       <Cell>
-        <MoreButton type="button" aria-label={`Действия для ${product.title}`}>
-          …
-        </MoreButton>
+        <MoreButton
+          shape="circle"
+          icon={<EllipsisOutlined />}
+          aria-label={`Действия для ${product.title}`}
+        />
       </Cell>
     </Wrapper>
   );

@@ -79,3 +79,12 @@ export const PaginationControl = styled(Pagination)`
     line-height: 30px;
   }
 `;
+
+export const ShowProductsAmount = styled.span`
+  color: #969b9fff;
+  font-weight: 300;
+`;
+
+export const AcсentText = styled.span`
+  color: #333333;
+`;

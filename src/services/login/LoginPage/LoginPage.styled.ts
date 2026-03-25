@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
     linear-gradient(180deg, #fff 0%, #fbfbfb 100%);
 `;
 
-const neumorphismStyles = css`
+export const neumorphismStyles = css`
   position: relative;
   background: linear-gradient(180deg, #23232308 0%, rgba(35, 35, 35, 0) 50%);
   outline: 5px solid white;

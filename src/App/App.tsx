@@ -4,6 +4,7 @@ import { Router } from "../Router";
 import { authService } from "@/services/auth";
 import { BrowserRouter } from "react-router-dom";
 import "@/services/user/user.service";
+import { LoadingPage } from "@/components/ui/LoadingPage";
 
 const {
   gates: { AuthGate },
@@ -28,7 +29,7 @@ export function App() {
     >
       <BrowserRouter>
         <AuthGate />
-        {isCheckingAuth && <div>Checking authentication...</div>}
+        {isCheckingAuth && <LoadingPage />}
         {!isCheckingAuth && <Router />}
       </BrowserRouter>
     </ConfigProvider>

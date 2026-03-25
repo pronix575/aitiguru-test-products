@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import styled, { css } from "styled-components";
 import { TABLE_COLUMNS } from "../ProductsListTable.styled";
 import type { TableCheckboxProps } from "../ProductsListTable.types";
@@ -33,8 +34,8 @@ export const Checkbox = styled.button<TableCheckboxProps>`
   width: 24px;
   height: 24px;
   border-radius: 6px;
-  border: 1.5px solid ${({ $checked }) =>
-    $checked ? "var(--color-primary)" : "#c7ccd6"};
+  border: 1.5px solid
+    ${({ $checked }) => ($checked ? "var(--color-primary)" : "#c7ccd6")};
   background: ${({ $checked }) =>
     $checked ? "var(--color-primary)" : "transparent"};
   position: relative;
@@ -124,34 +125,40 @@ export const RatingValue = styled(ValueText)<{ $isLow: boolean }>`
 export const PriceValue = styled(ValueText)`
   letter-spacing: 0.08em;
   white-space: nowrap;
+  font-family: monospace;
 `;
 
-export const AddButton = styled.button`
-  width: 56px;
+export const AddButton = styled(Button)`
   height: 30px;
-  border: none;
-  border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: 28px;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  min-width: 52px;
+
+  &.ant-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 24px;
+    padding-inline: 24px;
+  }
 `;
 
-export const MoreButton = styled.button`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #b8bcc5;
-  background: transparent;
-  color: #b8bcc5;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+export const MoreButton = styled(Button)`
+  width: 32px;
+  height: 32px;
+
+  &.ant-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-color: #b8bcc5;
+    color: #b8bcc5;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &.ant-btn .anticon {
+    font-size: 18px;
+    line-height: 1;
+  }
 `;
