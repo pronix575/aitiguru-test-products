@@ -20,3 +20,12 @@ export const ManageUserPanel = styled.div`
   gap: 16px;
   align-items: center;
 `;
+
+export const ThemeToggle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  white-space: nowrap;
+`;

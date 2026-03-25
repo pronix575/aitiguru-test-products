@@ -1,29 +1,28 @@
-import { ConfigProvider } from "antd";
+import { ConfigProvider, theme as antdTheme } from "antd";
 import { useUnit } from "effector-react";
 import { Router } from "../Router";
 import { authService } from "@/services/auth";
 import { BrowserRouter } from "react-router-dom";
 import "@/services/user/user.service";
 import { LoadingPage } from "@/components/ui/LoadingPage";
+import { ThemeProvider, useTheme } from "@/services/theme";
 
 const {
   gates: { AuthGate },
 } = authService;
 
-export function App() {
+function AppContent() {
   const isCheckingAuth = useUnit(authService.models.$isCheckingAuth);
-  const primaryColor =
-    typeof window === "undefined"
-      ? "var(--color-primary)"
-      : getComputedStyle(document.documentElement)
-          .getPropertyValue("--color-primary")
-          .trim() || "var(--color-primary)";
+  const { isDarkTheme } = useTheme();
 
   return (
     <ConfigProvider
       theme={{
+        algorithm: isDarkTheme
+          ? antdTheme.darkAlgorithm
+          : antdTheme.defaultAlgorithm,
         token: {
-          colorPrimary: primaryColor,
+          colorPrimary: "#3344e8",
         },
       }}
     >
@@ -33,5 +32,13 @@ export function App() {
         {!isCheckingAuth && <Router />}
       </BrowserRouter>
     </ConfigProvider>
+  );
+}
+
+export function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

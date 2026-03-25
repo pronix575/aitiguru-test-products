@@ -42,6 +42,10 @@ export const SearchInput = styled(Input)`
     color: var(--color-text-muted);
     font-size: 16px;
   }
+
+  &.ant-input-affix-wrapper .ant-input {
+    color: var(--color-text-primary);
+  }
 `;
 
 export const SearchInputWrap = styled.div`

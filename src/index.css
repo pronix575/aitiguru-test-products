@@ -34,7 +34,7 @@
 
 :root {
   color: var(--color-text-primary);
-  background-color: var(--color-white);
+  background-color: var(--color-background);
   font-family:
     Inter,
     system-ui,
@@ -42,6 +42,39 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --color-white: #171c26;
+  --color-background: #0f141c;
+  --color-background-soft: #151b26;
+  --color-background-input: #202838;
+  --color-text-primary: #f2f5fa;
+  --color-text-secondary: #c0c7d4;
+  --color-text-muted: #93a0b3;
+  --color-text-placeholder: #6f7c8f;
+  --color-text-subtle: #8b97aa;
+  --color-border: #293244;
+  --color-border-strong: #39465d;
+  --color-primary: #5f72ff;
+  --color-primary-light: #7a8aff;
+  --color-primary-dark: #4a5ce3;
+  --color-primary-soft: #95a3ff;
+  --color-error: #ff8b8b;
+  --color-shadow-subtle: rgb(0 0 0 / 18%);
+  --color-shadow-card: rgb(0 0 0 / 26%);
+  --color-white-alpha-90: rgb(23 28 38 / 90%);
+  --color-white-alpha-35: rgb(255 255 255 / 35%);
+  --color-white-alpha-22: rgb(255 255 255 / 22%);
+  --color-dark-alpha-05: rgb(255 255 255 / 5%);
+  --color-dark-alpha-03: rgb(255 255 255 / 3%);
+  --color-dark-alpha-0: rgb(255 255 255 / 0%);
+  --color-gray-alpha-20: rgb(255 255 255 / 12%);
+  --color-primary-alpha-35: rgb(95 114 255 / 35%);
+  --color-primary-alpha-08: rgb(95 114 255 / 12%);
+  --color-error-alpha-90: rgb(255 139 139 / 90%);
+  --color-error-alpha-12: rgb(255 139 139 / 12%);
+  color-scheme: dark;
 }
 
 * {
@@ -52,6 +85,6 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--color-white);
+  background-color: var(--color-background);
   color: var(--color-text-primary);
 }
