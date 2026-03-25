@@ -46,22 +46,22 @@ const $rememberMe = createStore(false)
 const $localStorageAuthToken = createStore<string | null>(null).on(
   setLocalStorageAuthToken,
   (_, token) => token,
-);
+).reset(handleLogout);
 
 const $sessionStorageAuthToken = createStore<string | null>(null).on(
   setSessionStorageAuthToken,
   (_, token) => token,
-);
+).reset(handleLogout);
 
 const $localStorageRefreshToken = createStore<string | null>(null).on(
   setLocalStorageRefreshToken,
   (_, token) => token,
-);
+).reset(handleLogout);
 
 const $sessionStorageRefreshToken = createStore<string | null>(null).on(
   setSessionStorageRefreshToken,
   (_, token) => token,
-);
+).reset(handleLogout);
 
 const $sessionStorageCredentials = combine({
   authToken: $sessionStorageAuthToken,
