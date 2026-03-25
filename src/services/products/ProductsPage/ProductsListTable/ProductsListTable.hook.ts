@@ -1,13 +1,10 @@
 import { useState } from "react";
 import type { ProductsResponse } from "@/api/dummyjson.types";
-import { getVisiblePages } from "./ProductsListTable.utils";
 
 export function useProductsListTable(products: ProductsResponse) {
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
 
-  const totalPages = Math.max(1, Math.ceil(products.total / products.limit));
   const currentPage = Math.floor(products.skip / products.limit) + 1;
-  const visiblePages = getVisiblePages(totalPages, currentPage);
   const allSelected =
     products.products.length > 0 &&
     selectedProductIds.length === products.products.length;
@@ -38,6 +35,5 @@ export function useProductsListTable(products: ProductsResponse) {
     selectedProductIds,
     toggleAllProducts,
     toggleProduct,
-    visiblePages,
   };
 }

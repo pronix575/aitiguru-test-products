@@ -1,9 +1,12 @@
 import type { ProductsQuery, ProductsResponse } from "@/api";
-import { createStore, sample } from "effector";
+import { createEvent, createStore, sample } from "effector";
 import { createGate } from "effector-react";
 import { fetchProductsFx } from "./products.api";
 
+const DEFAULT_PRODUCTS_LIMIT = 5;
+
 const ProductsGate = createGate();
+const setProductsPage = createEvent<number>();
 
 const $productsPagedList = createStore<ProductsResponse | null>(null).on(
   fetchProductsFx.doneData,
@@ -11,11 +14,15 @@ const $productsPagedList = createStore<ProductsResponse | null>(null).on(
 );
 
 const $productsQueryParams = createStore<ProductsQuery>({
-  limit: 5,
-});
+  limit: DEFAULT_PRODUCTS_LIMIT,
+  skip: 0,
+}).on(setProductsPage, (state, page) => ({
+  ...state,
+  skip: (page - 1) * (state.limit ?? DEFAULT_PRODUCTS_LIMIT),
+}));
 
 sample({
-  clock: ProductsGate.open,
+  clock: [ProductsGate.open, $productsQueryParams.updates],
   source: $productsQueryParams,
   target: fetchProductsFx,
 });
@@ -26,5 +33,9 @@ export const productsService = {
   },
   models: {
     $productsPagedList,
+    $isProductsLoading: fetchProductsFx.pending,
+  },
+  events: {
+    setProductsPage,
   },
 };

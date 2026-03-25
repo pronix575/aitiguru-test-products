@@ -1,5 +1,3 @@
-const PAGE_BUTTONS_LIMIT = 5;
-
 export function formatCategoryLabel(category: string) {
   return category
     .split("-")
@@ -12,14 +10,4 @@ export function formatPrice(price: number) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(price);
-}
-
-export function getVisiblePages(totalPages: number, currentPage: number) {
-  const pageCount = Math.min(totalPages, PAGE_BUTTONS_LIMIT);
-  const startPage = Math.max(
-    1,
-    Math.min(currentPage - Math.floor(pageCount / 2), totalPages - pageCount + 1),
-  );
-
-  return Array.from({ length: pageCount }, (_, index) => startPage + index);
 }

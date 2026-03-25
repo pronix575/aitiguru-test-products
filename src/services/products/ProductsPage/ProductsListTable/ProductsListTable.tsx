@@ -4,9 +4,7 @@ import {
   Cell,
   Footer,
   HeaderRow,
-  Pagination,
-  PaginationArrow,
-  PaginationButton,
+  PaginationControl,
   Table,
   TableScroll,
   Wrapper,
@@ -16,7 +14,11 @@ import { ProductRow } from "./ProductRow";
 import { useProductsListTable } from "./ProductsListTable.hook";
 import type { Props } from "./ProductsListTable.types";
 
-export const ProductsListTable: FC<Props> = ({ products }) => {
+export const ProductsListTable: FC<Props> = ({
+  products,
+  isLoading,
+  onPageChange,
+}) => {
   const {
     allSelected,
     currentPage,
@@ -25,7 +27,6 @@ export const ProductsListTable: FC<Props> = ({ products }) => {
     selectedProductIds,
     toggleAllProducts,
     toggleProduct,
-    visiblePages,
   } = useProductsListTable(products);
 
   return (
@@ -71,23 +72,15 @@ export const ProductsListTable: FC<Props> = ({ products }) => {
         <span>
           Показано {rangeStart}-{rangeEnd} из {products.total}
         </span>
-        <Pagination>
-          <PaginationArrow type="button" aria-label="Предыдущая страница">
-            ‹
-          </PaginationArrow>
-          {visiblePages.map((pageNumber) => (
-            <PaginationButton
-              key={pageNumber}
-              type="button"
-              $isActive={pageNumber === currentPage}
-            >
-              {pageNumber}
-            </PaginationButton>
-          ))}
-          <PaginationArrow type="button" aria-label="Следующая страница">
-            ›
-          </PaginationArrow>
-        </Pagination>
+        <PaginationControl
+          current={currentPage}
+          defaultPageSize={products.limit}
+          disabled={isLoading}
+          hideOnSinglePage
+          showSizeChanger={false}
+          total={products.total}
+          onChange={onPageChange}
+        />
       </Footer>
     </Wrapper>
   );

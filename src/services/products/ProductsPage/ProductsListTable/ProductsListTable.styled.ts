@@ -1,5 +1,5 @@
+import { Pagination } from "antd";
 import styled from "styled-components";
-import type { PaginationButtonProps } from "./ProductsListTable.types";
 
 export const TABLE_COLUMNS =
   "44px minmax(320px, 2.4fr) minmax(150px, 1fr) minmax(150px, 1fr) 120px minmax(160px, 0.8fr) 104px 56px";
@@ -52,34 +52,30 @@ export const Footer = styled.div`
   font-size: 16px;
 `;
 
-export const Pagination = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
+export const PaginationControl = styled(Pagination)`
+  .ant-pagination-item,
+  .ant-pagination-prev,
+  .ant-pagination-next {
+    min-width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
 
-export const PaginationArrow = styled.button`
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  color: #b8bcc5;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-`;
+  .ant-pagination-item-active {
+    background-color: var(--color-primary);
+    border: 0px;
+    color: var(--color-white);
 
-export const PaginationButton = styled.button<PaginationButtonProps>`
-  min-width: 32px;
-  height: 32px;
-  padding: 0 8px;
-  border-radius: 6px;
-  border: 1px solid
-    ${({ $isActive }) => ($isActive ? "transparent" : "var(--color-border)")};
-  background: ${({ $isActive }) =>
-    $isActive ? "var(--color-primary)" : "transparent"};
-  color: ${({ $isActive }) => ($isActive ? "var(--color-white)" : "#b8bcc5")};
-  font-size: 16px;
-  cursor: pointer;
+    a {
+      color: var(--color-white);
+
+      &:hover {
+        color: var(--color-white);
+      }
+    }
+  }
+
+  .ant-pagination-item a {
+    line-height: 30px;
+  }
 `;

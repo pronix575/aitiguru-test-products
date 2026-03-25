@@ -10,7 +10,11 @@ import type { Props } from "./ProductsPage.types";
 import { Button } from "antd";
 import { ProductsListTable } from "./ProductsListTable";
 
-export const ProductsPage: FC<Props> = ({ productsList }) => {
+export const ProductsPage: FC<Props> = ({
+  productsList,
+  isLoading,
+  onPageChange,
+}) => {
   return (
     <Wrapper>
       <SearchPanel>
@@ -21,7 +25,13 @@ export const ProductsPage: FC<Props> = ({ productsList }) => {
           <Title size="medium">Все позиции</Title>
           <Button type="primary">Добавить</Button>
         </ProductsHeader>
-        {productsList && <ProductsListTable products={productsList} />}
+        {productsList && (
+          <ProductsListTable
+            products={productsList}
+            isLoading={isLoading}
+            onPageChange={onPageChange}
+          />
+        )}
       </ProductsList>
     </Wrapper>
   );
