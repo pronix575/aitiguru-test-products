@@ -1,5 +1,6 @@
 import { Pagination } from "antd";
 import styled from "styled-components";
+import type { SortTriggerProps } from "./ProductsListTable.types";
 
 export const TABLE_COLUMNS =
   "44px minmax(320px, 2.4fr) minmax(150px, 1fr) minmax(150px, 1fr) 120px minmax(160px, 0.8fr) 104px 56px";
@@ -39,6 +40,20 @@ export const Body = styled.div`
 
 export const Cell = styled.div`
   min-width: 0;
+`;
+
+export const SortTrigger = styled.button<SortTriggerProps>`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: ${({ $isActive }) =>
+    $isActive ? "var(--color-primary)" : "inherit"};
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
 `;
 
 export const Footer = styled.div`

@@ -17,12 +17,16 @@ import {
   ValueText,
   Wrapper,
 } from "./ProductRow.styled";
-import { formatCategoryLabel, formatPrice } from "../ProductsListTable.utils";
+import {
+  formatCategoryLabel,
+  formatPriceParts,
+} from "../ProductsListTable.utils";
 import type { Props } from "./ProductRow.types";
 import { RAITING_LOW_THRESHOLD } from "./ProductRow.constants";
 
 export const ProductRow: FC<Props> = ({ isSelected, product, onToggle }) => {
   const rating = Number(product.rating.toFixed(1));
+  const { integerPart, fractionalPart } = formatPriceParts(product.price);
 
   return (
     <Wrapper $isSelected={isSelected}>
@@ -48,7 +52,7 @@ export const ProductRow: FC<Props> = ({ isSelected, product, onToggle }) => {
       </ProductCell>
 
       <Cell>
-        <BoldText>{product.brand ?? "Без бренда"}</BoldText>
+        <BoldText>{product.brand ?? "—"}</BoldText>
       </Cell>
 
       <Cell>
@@ -62,7 +66,10 @@ export const ProductRow: FC<Props> = ({ isSelected, product, onToggle }) => {
       </Cell>
 
       <Cell>
-        <PriceValue>{formatPrice(product.price)}</PriceValue>
+        <PriceValue>
+          {integerPart},
+          <span className="float">{fractionalPart}</span>
+        </PriceValue>
       </Cell>
 
       <Cell>

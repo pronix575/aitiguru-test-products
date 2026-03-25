@@ -11,3 +11,12 @@ export function formatPrice(price: number) {
     maximumFractionDigits: 2,
   }).format(price);
 }
+
+export function formatPriceParts(price: number) {
+  const [integerPart, fractionalPart = "00"] = formatPrice(price).split(",");
+
+  return {
+    fractionalPart,
+    integerPart,
+  };
+}

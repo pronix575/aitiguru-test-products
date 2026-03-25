@@ -1,3 +1,8 @@
+import {
+  CaretDownOutlined,
+  CaretUpOutlined,
+  SwapOutlined,
+} from "@ant-design/icons";
 import type { FC } from "react";
 import {
   AcсentText,
@@ -7,6 +12,7 @@ import {
   HeaderRow,
   PaginationControl,
   ShowProductsAmount,
+  SortTrigger,
   Table,
   TableScroll,
   Wrapper,
@@ -20,6 +26,9 @@ export const ProductsListTable: FC<Props> = ({
   products,
   isLoading,
   onPageChange,
+  onSortChange,
+  sortBy,
+  sortOrder,
 }) => {
   const {
     allSelected,
@@ -47,8 +56,26 @@ export const ProductsListTable: FC<Props> = ({
             <Cell>Наименование</Cell>
             <Cell>Вендор</Cell>
             <Cell>Артикул</Cell>
-            <Cell>Оценка</Cell>
-            <Cell>Цена, ₽</Cell>
+            <Cell>
+              <SortTrigger
+                type="button"
+                $isActive={sortBy === "rating"}
+                onClick={() => onSortChange("rating")}
+              >
+                Оценка
+                <SortIcon field="rating" sortBy={sortBy} sortOrder={sortOrder} />
+              </SortTrigger>
+            </Cell>
+            <Cell>
+              <SortTrigger
+                type="button"
+                $isActive={sortBy === "price"}
+                onClick={() => onSortChange("price")}
+              >
+                Цена, ₽
+                <SortIcon field="price" sortBy={sortBy} sortOrder={sortOrder} />
+              </SortTrigger>
+            </Cell>
             <Cell />
             <Cell />
           </HeaderRow>
@@ -90,4 +117,18 @@ export const ProductsListTable: FC<Props> = ({
       </Footer>
     </Wrapper>
   );
+};
+
+type SortIconProps = {
+  field: "price" | "rating";
+  sortBy?: Props["sortBy"];
+  sortOrder?: Props["sortOrder"];
+};
+
+const SortIcon: FC<SortIconProps> = ({ field, sortBy, sortOrder }) => {
+  if (sortBy !== field) {
+    return <SwapOutlined />;
+  }
+
+  return sortOrder === "asc" ? <CaretUpOutlined /> : <CaretDownOutlined />;
 };

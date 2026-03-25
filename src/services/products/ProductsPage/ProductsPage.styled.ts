@@ -1,3 +1,4 @@
+import { Input } from "antd";
 import { Panel } from "@/components/ui/Panel";
 import styled from "styled-components";
 
@@ -12,7 +13,7 @@ export const Wrapper = styled.div`
 export const SearchPanel = styled(Panel)`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 24px;
 `;
 
 export const ProductsList = styled(Panel)`
@@ -26,6 +27,33 @@ export const ProductsHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+export const SearchInput = styled(Input)`
+  max-width: 1023px;
+
+  &.ant-input-affix-wrapper {
+    height: 50px;
+    padding-inline: 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #f3f3f3;
+    box-shadow: none;
+    color: #999999;
+    font-size: 16px;
+  }
+`;
+
+export const SearchInputWrap = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+`;
+
+export const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
 `;
 
 export const Title = styled.div<{ size: "small" | "medium" | "large" }>`

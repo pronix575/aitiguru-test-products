@@ -126,6 +126,10 @@ export const PriceValue = styled(ValueText)`
   letter-spacing: 0.08em;
   white-space: nowrap;
   font-family: monospace;
+
+  .float {
+    color: #999999;
+  }
 `;
 
 export const AddButton = styled(Button)`

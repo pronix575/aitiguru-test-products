@@ -9,10 +9,22 @@ const {
 } = productsService;
 
 export const ProductsContainer = () => {
-  const { productsList, isLoading, setProductsPage } = useUnit({
+  const {
+    productsList,
+    isLoading,
+    setProductsPage,
+    queryParams,
+    onReload,
+    onSearchChange,
+    onSortChange,
+  } = useUnit({
     productsList: models.$productsPagedList,
     isLoading: models.$isProductsLoading,
     setProductsPage: events.setProductsPage,
+    queryParams: models.$productsQueryParams,
+    onReload: events.reloadProducts,
+    onSearchChange: events.setProductsSearchQuery,
+    onSortChange: events.toggleProductsSort,
   });
 
   return (
@@ -22,6 +34,12 @@ export const ProductsContainer = () => {
         productsList={productsList}
         isLoading={isLoading}
         onPageChange={setProductsPage}
+        onReload={onReload}
+        onSearchChange={onSearchChange}
+        onSortChange={onSortChange}
+        searchQuery={queryParams.q}
+        sortBy={queryParams.sortBy}
+        sortOrder={queryParams.order}
       />
     </>
   );
